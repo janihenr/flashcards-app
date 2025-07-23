@@ -1,12 +1,9 @@
----
-alwaysApply: true
----
 
-# Development Logging System
+# Development Logging System [DISABLED]
 
-## Automatic Logging Requirements
+## Optional Logging Requirements
 
-**MANDATORY**: For every user interaction, you MUST update the current log file with:
+**OPTIONAL**: When specifically requested by the user, you can update the current log file with:
 
 1. **User Prompt**: The exact user query/request
 2. **Files Changed**: List of all files that were modified/created/deleted
@@ -22,7 +19,7 @@ alwaysApply: true
 
 ## Log Entry Format
 
-Each log entry should follow this format:
+When logging is requested, use this format:
 
 ```markdown
 ## [TIMESTAMP] - User Request #{ENTRY_NUMBER}
@@ -40,14 +37,24 @@ Each log entry should follow this format:
 ---
 ```
 
-## Implementation Rules
+## Implementation Rules (When Enabled)
 
-1. **Always check current version** from package.json before logging
+1. **Check current version** from package.json before logging
 2. **Create new log file** if version has changed since last entry
 3. **Append to existing log** if version is the same
-4. **Never skip logging** - even if no files were changed, log the interaction
+4. **Only log when explicitly requested** by the user
 5. **Be specific** about changes made to each file
 
 ## Current Log File
+
+Based on package.json version 0.1.0, use: `logs/development-log-v0.1.0.md`
+
+## Re-enabling Logging
+
+To re-enable automatic logging, the user can request it and you should:
+1. Change `alwaysApply: false` back to `alwaysApply: true`
+2. Remove `[DISABLED]` from the title
+3. Change language back to mandatory requirements
+
 
 Based on package.json version 0.1.0, use: `logs/development-log-v0.1.0.md`

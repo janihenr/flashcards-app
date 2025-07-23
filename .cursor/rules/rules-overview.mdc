@@ -1,21 +1,19 @@
----
-description: "Overview of all Cursor Rules available in this project"
----
 
 # Cursor Rules Overview
 
-This project has a comprehensive set of Cursor Rules to ensure consistent development practices and automatic logging.
+This project has a comprehensive set of Cursor Rules to ensure consistent development practices.
 
 ## Active Rules
 
-### 1. **Logging System** ([logging-system.mdc](mdc:.cursor/rules/logging-system.mdc))
-- **Type**: Always Applied
-- **Purpose**: Automatically tracks all user interactions and file changes
+### 1. **Logging System** ([logging-system.mdc](mdc:.cursor/rules/logging-system.mdc)) - **[DISABLED]**
+- **Type**: Optional (was Always Applied)
+- **Purpose**: Can track user interactions and file changes when specifically requested
+- **Status**: Currently disabled to reduce overhead
 - **Features**: 
-  - Logs every user prompt
-  - Records all file modifications
-  - Maintains version-specific log files
-  - Creates new log files when package.json version changes
+  - Can log user prompts when requested
+  - Can record file modifications when requested
+  - Can maintain version-specific log files when requested
+  - Can create new log files when package.json version changes
 
 ### 2. **Project Structure** ([project-structure.mdc](mdc:.cursor/rules/project-structure.mdc))
 - **Type**: Always Applied
@@ -47,29 +45,30 @@ This project has a comprehensive set of Cursor Rules to ensure consistent develo
 ## Current Version
 
 **App Version**: 0.1.0 (from [package.json](mdc:package.json))  
-**Current Log File**: [logs/development-log-v0.1.0.md](mdc:logs/development-log-v0.1.0.md)
+**Current Log File**: [logs/development-log-v0.1.0.md](mdc:logs/development-log-v0.1.0.md) - **[LOGGING DISABLED]**
 
 ## How It Works
 
 1. **Always Applied Rules** are automatically used in every interaction
 2. **File-Specific Rules** are applied based on file patterns (globs)
-3. **Manual Rules** (like this one) can be fetched when needed
-4. **Logging** happens automatically for every user interaction
+3. **Manual/Optional Rules** (like logging) are used only when specifically requested
+4. **Logging** is now DISABLED by default to reduce overhead
 
 ## Key Benefits
 
 - **Consistency**: Enforces project patterns across all development
-- **Documentation**: Automatic logging of all changes and decisions
+- **Optional Documentation**: Logging available when needed, but not automatic
 - **Security**: Built-in authentication and authorization patterns
 - **Type Safety**: Strong TypeScript usage throughout the codebase
-- **Traceability**: Complete history of all modifications and user requests
+- **Reduced Overhead**: No automatic logging unless requested
+
+## Re-enabling Logging
+
+To re-enable automatic logging, simply ask for it and the logging system will be reactivated with automatic tracking of all changes and user requests.
 
 ## Usage
 
-These rules work automatically in the background. The logging system will:
-- Track every user prompt
-- Log all file changes with descriptions
-- Maintain version history
-- Create new log files when versions change
+The remaining rules work automatically in the background. Logging is now optional and will only happen when you specifically request it, reducing the overhead significantly while keeping all other development patterns intact.
+
 
 No manual intervention is required - just develop normally and everything will be logged automatically!

@@ -78,8 +78,15 @@ export default async function DeckPage({ params }: DeckPageProps) {
               size="default"
               className="bg-blue-600 text-white hover:bg-blue-700"
               disabled={cardCount === 0}
+              asChild={cardCount > 0}
             >
-              {cardCount > 0 ? "Study Cards" : "No Cards"}
+              {cardCount > 0 ? (
+                <Link href={`/decks/${deckId}/study`}>
+                  Study Cards
+                </Link>
+              ) : (
+                "No Cards"
+              )}
             </Button>
             <AddCardDialog deckId={deckId}>
               <Button 
