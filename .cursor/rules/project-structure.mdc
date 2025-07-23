@@ -1,0 +1,53 @@
+---
+alwaysApply: true
+---
+
+# Flashcards App Project Structure
+
+## Core Architecture
+
+This is a **Next.js 15** flashcards application with the following key technologies:
+- **Authentication**: Clerk
+- **Database**: Neon PostgreSQL with Drizzle ORM
+- **UI Framework**: shadcn/ui with Tailwind CSS
+- **TypeScript**: Full type safety
+
+## Key Directories
+
+### Database Layer
+- **Schema**: [src/db/schema.ts](mdc:src/db/schema.ts) - Drizzle schema definitions
+- **Connection**: [src/db/index.ts](mdc:src/db/index.ts) - Database connection setup
+- **Queries**: [src/db/queries/](mdc:src/db/queries/) - Organized query functions
+
+### Server Actions
+- **Deck Actions**: [src/actions/deck-actions.ts](mdc:src/actions/deck-actions.ts) - Deck CRUD operations
+- **Card Actions**: [src/actions/card-actions.ts](mdc:src/actions/card-actions.ts) - Card CRUD operations
+
+### Pages & Routes
+- **Root Layout**: [src/app/layout.tsx](mdc:src/app/layout.tsx) - Main app layout with Clerk
+- **Home Page**: [src/app/page.tsx](mdc:src/app/page.tsx) - Landing page
+- **Dashboard**: [src/app/dashboard/page.tsx](mdc:src/app/dashboard/page.tsx) - User dashboard
+- **Decks**: [src/app/decks/page.tsx](mdc:src/app/decks/page.tsx) - Deck management
+
+### Components
+- **UI Components**: [src/components/ui/](mdc:src/components/ui/) - shadcn/ui components
+- **Custom Components**: Built on top of shadcn/ui base components
+
+### Configuration
+- **Package**: [package.json](mdc:package.json) - Dependencies and scripts
+- **Drizzle Config**: [drizzle.config.ts](mdc:drizzle.config.ts) - Database configuration
+- **Next Config**: [next.config.ts](mdc:next.config.ts) - Next.js configuration
+
+## Data Flow
+
+1. **Server Components** fetch data using Drizzle queries
+2. **Server Actions** handle all mutations with Zod validation
+3. **Client Components** interact with server actions for dynamic behavior
+4. **Clerk Authentication** protects all routes and API endpoints
+
+## File Naming Conventions
+
+- **Pages**: Use `page.tsx` for Next.js App Router
+- **Actions**: End with `-actions.ts` (e.g., `deck-actions.ts`)
+- **Components**: Use PascalCase for component files
+- **Queries**: End with `-queries.ts` in the queries directory

@@ -1,8 +1,7 @@
-import { SignIn, SignUp } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 
 export default async function Home() {
   const { userId } = await auth();
@@ -10,6 +9,7 @@ export default async function Home() {
   if (userId) {
     redirect("/dashboard");
   }
+  
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="text-center space-y-8">
@@ -23,53 +23,21 @@ export default async function Home() {
         </div>
         
         <div className="space-y-4 max-w-sm mx-auto">
-          {/* Sign In Modal using shadcn/ui Dialog */}
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button className="w-full">
-                Sign In
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Sign In to Your Account</DialogTitle>
-              </DialogHeader>
-              <SignIn 
-                routing="hash"
-                appearance={{
-                  elements: {
-                    formButtonPrimary: "hidden",
-                    card: "shadow-none border-none",
-                  }
-                }}
-                redirectUrl="/dashboard"
-              />
-            </DialogContent>
-          </Dialog>
+          <p className="text-muted-foreground">
+            Sign in or create an account using the buttons in the header to get started.
+          </p>
           
-          {/* Sign Up Modal using shadcn/ui Dialog */}
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline" className="w-full">
-                Create Account
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Create Your Account</DialogTitle>
-              </DialogHeader>
-              <SignUp 
-                routing="hash"
-                appearance={{
-                  elements: {
-                    formButtonPrimary: "hidden",
-                    card: "shadow-none border-none",
-                  }
-                }}
-                redirectUrl="/dashboard"
-              />
-            </DialogContent>
-          </Dialog>
+          <div className="flex flex-col space-y-2">
+            <p className="text-sm text-muted-foreground">
+              ✨ Create and organize your flashcard decks
+            </p>
+            <p className="text-sm text-muted-foreground">
+              🧠 Study with spaced repetition
+            </p>
+            <p className="text-sm text-muted-foreground">
+              📊 Track your learning progress
+            </p>
+          </div>
         </div>
       </div>
     </div>

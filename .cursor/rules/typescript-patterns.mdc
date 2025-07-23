@@ -1,0 +1,121 @@
+---
+globs: *.ts,*.tsx
+---
+
+# TypeScript Patterns for Flashcards App
+
+## Server Actions Type Safety
+
+Always use Zod-derived types for server action parameters:
+
+```typescript
+// ✅ CORRECT: Zod schema with inferred types
+const CreateDeckSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  description: z.string().optional(),
+})
+
+type CreateDeckInput = z.infer<typeof CreateDeckSchema>
+
+export async function createDeck(input: CreateDeckInput) {
+  const validatedData = CreateDeckSchema.parse(input)
+  // ... rest of function
+}
+```
+
+## Database Type Usage
+
+Always import and use schema types from [src/db/schema.ts](mdc:src/db/schema.ts):
+
+```typescript
+// ✅ CORRECT: Import schema types
+import { 
+  decksTable, 
+  cardsTable, 
+  type Deck, 
+  type Card, 
+  type NewDeck, 
+  type NewCard 
+} from "@/db/schema"
+
+// Use proper types in functions
+function createDeck(deckData: NewDeck): Promise<Deck[]> {
+  return db.insert(decksTable).values(deckData).returning()
+}
+```
+
+## Component Props Typing
+
+Define explicit interfaces for component props:
+
+```typescript
+// ✅ CORRECT: Explicit prop interfaces
+interface DeckCardProps {
+  deck: Deck
+  onEdit?: (deck: Deck) => void
+  onDelete?: (deckId: number) => void
+}
+
+export function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
+  // Component implementation
+}
+```
+
+## Server Component Patterns
+
+Server components should have explicit return types:
+
+```typescript
+// ✅ CORRECT: Explicit return type for server components
+export default async function DecksPage(): Promise<JSX.Element> {
+  const { userId } = await auth()
+  
+  if (!userId) {
+    return <div>Please sign in</div>
+  }
+  
+  const decks = await getDecksByUserId(userId)
+  return <DecksView decks={decks} />
+}
+```
+
+## Error Handling Types
+
+Use proper error types and never use `any`:
+
+```typescript
+// ✅ CORRECT: Proper error handling
+try {
+  const result = await createDeck(deckData)
+  return result
+} catch (error) {
+  if (error instanceof z.ZodError) {
+    throw new Error(`Validation failed: ${error.message}`)
+  }
+  throw new Error("Failed to create deck")
+}
+```
+
+## Import Organization
+
+Group imports in this order:
+1. React/Next.js imports
+2. Third-party libraries
+3. Database and schema imports
+4. Component imports
+5. Utility imports
+
+```typescript
+// ✅ CORRECT: Import organization
+import { NextRequest, NextResponse } from "next/server"
+import { auth } from "@clerk/nextjs/server"
+import { z } from "zod"
+
+import { db } from "@/db"
+import { decksTable, type Deck } from "@/db/schema"
+
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
+
+import { cn } from "@/lib/utils"
+```

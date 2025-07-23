@@ -1,0 +1,175 @@
+---
+globs: src/db/**/*.ts,src/actions/**/*.ts,**/queries/**/*.ts
+---
+
+# Database Patterns for Flashcards App
+
+## Drizzle ORM Usage
+
+Always use the schema and connection from [src/db/schema.ts](mdc:src/db/schema.ts) and [src/db/index.ts](mdc:src/db/index.ts):
+
+```typescript
+// ✅ CORRECT: Import database components
+import { db } from "@/db"
+import { decksTable, cardsTable, type Deck, type NewDeck } from "@/db/schema" 
+import { eq, and, desc, asc } from "drizzle-orm"
+```
+
+## Query Patterns
+
+### User-Scoped Queries
+Always include userId in queries to ensure data isolation:
+
+```typescript
+// ✅ CORRECT: User-scoped query
+export async function getDecksByUserId(userId: string): Promise<Deck[]> {
+  return await db.select()
+    .from(decksTable)
+    .where(eq(decksTable.userId, userId))
+    .orderBy(desc(decksTable.createdAt))
+}
+```
+
+### Join Queries
+Use proper joins for related data:
+
+```typescript
+// ✅ CORRECT: Join with cards
+export async function getDeckWithCards(deckId: number, userId: string) {
+  return await db.select()
+    .from(decksTable)
+    .leftJoin(cardsTable, eq(decksTable.id, cardsTable.deckId))
+    .where(and(
+      eq(decksTable.id, deckId),
+      eq(decksTable.userId, userId)
+    ))
+}
+```
+
+## Server Actions Security
+
+### Authentication Check
+Every server action MUST start with auth verification:
+
+```typescript
+// ✅ CORRECT: Server action security pattern
+export async function createDeck(input: CreateDeckInput) {
+  const { userId } = await auth()
+  
+  if (!userId) {
+    throw new Error("Unauthorized")
+  }
+  
+  // Validate input
+  const validatedData = CreateDeckSchema.parse(input)
+  
+  // Create with userId
+  const newDeck: NewDeck = {
+    ...validatedData,
+    userId, // Always use server-side userId
+  }
+  
+  const [createdDeck] = await db.insert(decksTable)
+    .values(newDeck)
+    .returning()
+  
+  revalidatePath("/decks")
+  return createdDeck
+}
+```
+
+### Ownership Verification
+Always verify user owns the resource before mutations:
+
+```typescript
+// ✅ CORRECT: Ownership verification
+export async function updateDeck(input: UpdateDeckInput) {
+  const { userId } = await auth()
+  
+  if (!userId) {
+    throw new Error("Unauthorized")
+  }
+  
+  // Verify ownership
+  const [existingDeck] = await db.select()
+    .from(decksTable)
+    .where(and(
+      eq(decksTable.id, input.id),
+      eq(decksTable.userId, userId)
+    ))
+    .limit(1)
+  
+  if (!existingDeck) {
+    throw new Error("Deck not found or access denied")
+  }
+  
+  // Proceed with update
+  const [updatedDeck] = await db.update(decksTable)
+    .set({ ...input, updatedAt: new Date() })
+    .where(eq(decksTable.id, input.id))
+    .returning()
+  
+  return updatedDeck
+}
+```
+
+## Transaction Patterns
+
+Use transactions for multi-table operations:
+
+```typescript
+// ✅ CORRECT: Transaction usage
+export async function createDeckWithCards(deckData: NewDeck, cards: NewCard[]) {
+  const { userId } = await auth()
+  
+  if (!userId) {
+    throw new Error("Unauthorized")
+  }
+  
+  return await db.transaction(async (tx) => {
+    const [deck] = await tx.insert(decksTable)
+      .values({ ...deckData, userId })
+      .returning()
+    
+    if (cards.length > 0) {
+      await tx.insert(cardsTable)
+        .values(cards.map(card => ({ ...card, deckId: deck.id })))
+    }
+    
+    return deck
+  })
+}
+```
+
+## Error Handling
+
+Provide meaningful error messages:
+
+```typescript
+// ✅ CORRECT: Proper error handling
+try {
+  const result = await updateDeck(input)
+  return result
+} catch (error) {
+  console.error("Database error:", error)
+  
+  if (error instanceof z.ZodError) {
+    throw new Error(`Validation failed: ${error.message}`)
+  }
+  
+  if (error.message.includes("not found")) {
+    throw new Error("Resource not found")
+  }
+  
+  throw new Error("Database operation failed")
+}
+```
+
+## Key Rules
+
+1. **Never skip authentication** in server actions
+2. **Always verify ownership** before mutations  
+3. **Use transactions** for multi-table operations
+4. **Include proper error handling** with meaningful messages
+5. **Always use `returning()`** when you need the result
+6. **Revalidate paths** after mutations that affect UI

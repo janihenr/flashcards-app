@@ -1,0 +1,53 @@
+---
+alwaysApply: true
+---
+
+# Development Logging System
+
+## Automatic Logging Requirements
+
+**MANDATORY**: For every user interaction, you MUST update the current log file with:
+
+1. **User Prompt**: The exact user query/request
+2. **Files Changed**: List of all files that were modified/created/deleted
+3. **Change Summary**: Brief description of what changes were made
+4. **Timestamp**: When the changes occurred
+
+## Log File Management
+
+- **Location**: All logs go in the `logs/` directory
+- **Naming**: Use format `development-log-v{VERSION}.md` (e.g., `development-log-v0.1.0.md`)
+- **Version Tracking**: When package.json version changes, create a new log file
+- **Current Version**: Check [package.json](mdc:package.json) for version info
+
+## Log Entry Format
+
+Each log entry should follow this format:
+
+```markdown
+## [TIMESTAMP] - User Request #{ENTRY_NUMBER}
+
+**User Prompt:**
+[Exact user request/query]
+
+**Files Modified:**
+- `path/to/file1.ext` - [Brief description of changes]
+- `path/to/file2.ext` - [Brief description of changes]
+
+**Summary:**
+[Overall summary of what was accomplished]
+
+---
+```
+
+## Implementation Rules
+
+1. **Always check current version** from package.json before logging
+2. **Create new log file** if version has changed since last entry
+3. **Append to existing log** if version is the same
+4. **Never skip logging** - even if no files were changed, log the interaction
+5. **Be specific** about changes made to each file
+
+## Current Log File
+
+Based on package.json version 0.1.0, use: `logs/development-log-v0.1.0.md`
