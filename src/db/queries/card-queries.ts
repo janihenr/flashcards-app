@@ -27,7 +27,7 @@ export async function getCardsByDeckId(deckId: number): Promise<Card[]> {
   
   return await db.select().from(cardsTable)
     .where(eq(cardsTable.deckId, deckId))
-    .orderBy(asc(cardsTable.createdAt))
+    .orderBy(desc(cardsTable.createdAt))
 }
 
 /**

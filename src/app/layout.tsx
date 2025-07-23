@@ -10,6 +10,7 @@ import {
 } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { Button } from "@/components/ui/button";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -68,6 +69,7 @@ export default function RootLayout({
             </nav>
           </header>
           <main>{children}</main>
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>

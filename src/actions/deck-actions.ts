@@ -10,7 +10,7 @@ import { redirect } from "next/navigation"
 
 const CreateDeckSchema = z.object({
   title: z.string().min(1, "Title is required").max(255, "Title too long"),
-  description: z.string().optional(),
+  description: z.string().min(1, "Description is required").max(1000, "Description too long"),
 })
 
 const UpdateDeckSchema = z.object({

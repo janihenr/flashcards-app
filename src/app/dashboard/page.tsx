@@ -2,7 +2,9 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { getUserDecks, getUserTotalCardsCount } from "@/db/queries";
+import CreateDeckDialog from "@/components/CreateDeckDialog";
 
 export default async function DashboardPage() {
   const { userId } = await auth();
@@ -50,9 +52,13 @@ export default async function DashboardPage() {
                 <p className="text-gray-300">
                   Start building a new flashcard deck for your studies.
                 </p>
-                <Button className="w-full bg-blue-600 text-white hover:bg-blue-700">
-                  Create Deck
-                </Button>
+                <CreateDeckDialog 
+                  trigger={
+                    <Button className="w-full bg-blue-600 text-white hover:bg-blue-700">
+                      Create Deck
+                    </Button>
+                  }
+                />
               </CardContent>
             </Card>
 
@@ -64,12 +70,14 @@ export default async function DashboardPage() {
                 <p className="text-gray-300">
                   View and manage all your existing flashcard decks.
                 </p>
-                <Button 
-                  variant="outline" 
-                  className="w-full border-gray-600 text-gray-100 hover:bg-gray-800"
-                >
-                  View Decks
-                </Button>
+                <Link href="/decks">
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-gray-600 text-gray-100 hover:bg-gray-800"
+                  >
+                    View Decks
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
 
@@ -98,21 +106,18 @@ export default async function DashboardPage() {
               <h3 className="text-2xl font-semibold mb-6 text-white">Recent Decks</h3>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {userDecks.slice(0, 6).map((deck) => (
-                  <Card key={deck.id} className="bg-gray-900 border-gray-800">
-                    <CardHeader>
-                      <CardTitle className="text-lg text-gray-100">{deck.title}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      {deck.description && (
-                        <p className="text-sm text-gray-300 mb-3 overflow-hidden text-ellipsis">
-                          {deck.description}
-                        </p>
-                      )}
-                      <div className="text-xs text-gray-400">
-                        Created {new Date(deck.createdAt).toLocaleDateString()}
-                      </div>
-                    </CardContent>
-                  </Card>
+                  <Link key={deck.id} href={`/decks/${deck.id}`}>
+                    <Card className="bg-gray-900 border-gray-800 hover:bg-gray-800 transition-colors cursor-pointer">
+                      <CardHeader>
+                        <CardTitle className="text-lg text-gray-100">{deck.title}</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-xs text-gray-400">
+                          Updated {new Date(deck.updatedAt).toLocaleDateString()}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -160,12 +165,16 @@ export default async function DashboardPage() {
               <p className="text-gray-300 mb-6">
                 Create your first deck to start organizing your study materials and track your progress.
               </p>
-              <Button 
-                size="lg" 
-                className="bg-blue-600 text-white hover:bg-blue-700"
-              >
-                Create Your First Deck
-              </Button>
+              <CreateDeckDialog 
+                trigger={
+                  <Button 
+                    size="lg" 
+                    className="bg-blue-600 text-white hover:bg-blue-700"
+                  >
+                    Create Your First Deck
+                  </Button>
+                }
+              />
             </div>
           )}
         </div>
