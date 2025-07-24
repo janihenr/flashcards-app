@@ -1,7 +1,5 @@
 import { auth } from "@clerk/nextjs/server";
-import { Button } from "@/components/ui/button";
 import { redirect } from "next/navigation";
-import Link from "next/link";
 
 export default async function Home() {
   const { userId } = await auth();

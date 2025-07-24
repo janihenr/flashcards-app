@@ -1,6 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";

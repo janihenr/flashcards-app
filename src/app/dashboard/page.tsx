@@ -1,4 +1,4 @@
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Protect } from "@clerk/nextjs";
@@ -9,7 +9,6 @@ import CreateDeckDialog from "@/components/CreateDeckDialog";
 
 export default async function DashboardPage() {
   const { userId, has } = await auth();
-  const user = await currentUser();
   
   if (!userId) {
     redirect("/");
@@ -17,7 +16,6 @@ export default async function DashboardPage() {
 
   // Check user's billing plan and features
   const hasUnlimitedDecks = has({ feature: 'unlimited_decks' });
-  const isFreePlan = has({ plan: 'free_user' });
 
   // ✅ CORRECT: Using centralized query functions
   // These functions handle all auth, ownership, and DB operations

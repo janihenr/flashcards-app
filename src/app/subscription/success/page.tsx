@@ -9,7 +9,7 @@ import Link from "next/link";
 
 export default function SubscriptionSuccessPage() {
   const router = useRouter();
-  const { user, isLoaded } = useUser();
+  const { isLoaded } = useUser();
   const [countdown, setCountdown] = useState(5);
 
   useEffect(() => {

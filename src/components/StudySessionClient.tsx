@@ -167,7 +167,7 @@ export function StudySessionClient({ deck, cards }: StudySessionClientProps) {
     return () => {
       document.removeEventListener('keydown', handleKeyPress);
     };
-  }, [currentIndex, remainingCards.length, isCompleted]);
+  }, [currentIndex, remainingCards.length, isCompleted, handleFlip, handleNext, handlePrevious, handleReset, handleShuffle]);
 
   // If cards are still loading
   if (shuffledCards.length === 0) {
@@ -213,7 +213,7 @@ export function StudySessionClient({ deck, cards }: StudySessionClientProps) {
 
             <div className="text-center">
               <p className="text-gray-300 mb-6">
-                You studied {stats.total} card{stats.total === 1 ? '' : 's'} from "{deck.title}"
+                You studied {stats.total} card{stats.total === 1 ? '' : 's'} from &quot;{deck.title}&quot;
               </p>
               
               <div className="flex gap-4 justify-center">

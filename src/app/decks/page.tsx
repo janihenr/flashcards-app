@@ -32,7 +32,7 @@ export default async function DecksPage() {
         </div>
         <div className="text-center space-y-4">
           <h1 className="text-2xl font-bold text-gray-100">My Flashcard Decks</h1>
-          <p className="text-gray-400">You don't have any decks yet.</p>
+          <p className="text-gray-400">You don&apos;t have any decks yet.</p>
           <CreateDeckDialog />
         </div>
       </div>

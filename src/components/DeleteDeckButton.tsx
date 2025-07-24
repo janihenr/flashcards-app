@@ -55,7 +55,7 @@ export function DeleteDeckButton({ deckId, deckTitle }: DeleteDeckButtonProps) {
         </DialogHeader>
         <div className="space-y-4">
           <p className="text-gray-300">
-            Are you sure you want to delete <strong>"{deckTitle}"</strong>? 
+            Are you sure you want to delete <strong>&quot;{deckTitle}&quot;</strong>? 
             This will permanently delete the deck and all its cards. This action cannot be undone.
           </p>
           <div className="flex justify-end space-x-2">

@@ -1,7 +1,7 @@
 "use server"
 import { db } from "@/db"
 import { cardsTable, decksTable, type Card, type NewCard } from "@/db/schema"
-import { eq, and, asc, desc } from "drizzle-orm"
+import { eq, and, desc } from "drizzle-orm"
 import { auth } from "@clerk/nextjs/server"
 import { verifyDeckOwnership } from "./deck-queries"
 

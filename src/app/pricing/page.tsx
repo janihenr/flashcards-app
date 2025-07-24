@@ -21,7 +21,7 @@ export default function PricingPage() {
       
       <div className="bg-gray-800 rounded-lg p-6 mt-8">
         <h2 className="text-xl font-semibold text-gray-100 mb-4">
-          What's Included
+          What&apos;s Included
         </h2>
         <div className="grid md:grid-cols-2 gap-6">
           <div>

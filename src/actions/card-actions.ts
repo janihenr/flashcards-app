@@ -237,7 +237,7 @@ Answer:`
         const analysisResult = contextData.choices?.[0]?.message?.content?.trim().toUpperCase()
         isLanguageLearning = analysisResult === 'LANGUAGE'
         console.log(`📊 Context analysis result: ${analysisResult} → ${isLanguageLearning ? 'Language Learning' : 'Educational'} format`)
-      } catch (error) {
+      } catch {
         console.warn('⚠️ Failed to parse context analysis, defaulting to EDUCATION format')
         isLanguageLearning = false
       }
@@ -349,7 +349,7 @@ Return ONLY the JSON object, no additional text.`
       console.log('📄 Raw AI response:', content.substring(0, 200) + '...')
 
       // Parse the JSON response
-      let parsedResponse: any
+      let parsedResponse: { flashcards?: Array<{ front: string; back: string }> }
       try {
         parsedResponse = JSON.parse(content)
       } catch (jsonError) {
