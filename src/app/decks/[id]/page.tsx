@@ -8,6 +8,8 @@ import { getDeckById, getCardsByDeckId, getCardsCountByDeckId } from "@/db/queri
 import { AddCardDialog } from "@/components/AddCardDialog";
 import { EditCardDialog } from "@/components/EditCardDialog";
 import { DeleteCardButton } from "@/components/DeleteCardButton";
+import { AIGenerationDialog } from "@/components/AIGenerationDialog";
+import { Sparkles } from "lucide-react";
 
 interface DeckPageProps {
   params: Promise<{ id: string }>;
@@ -88,6 +90,22 @@ export default async function DeckPage({ params }: DeckPageProps) {
                 "No Cards"
               )}
             </Button>
+            
+            <AIGenerationDialog 
+              deckId={deckId} 
+              deckTitle={deck.title}
+              deckDescription={deck.description || undefined}
+            >
+              <Button 
+                variant="secondary" 
+                size="default"
+                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
+              >
+                <Sparkles className="mr-2 h-4 w-4" />
+                Generate with AI
+              </Button>
+            </AIGenerationDialog>
+            
             <AddCardDialog deckId={deckId}>
               <Button 
                 variant="secondary" 
