@@ -40,6 +40,7 @@ const UpdateDeckSchema = z.object({
  * GET Route Template - Read Data
  * MANDATORY: Always start with authentication check
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function GET(_request: NextRequest) {
   // MANDATORY: First line of every API route
   const { userId } = await auth();

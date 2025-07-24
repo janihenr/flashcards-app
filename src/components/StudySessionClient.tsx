@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -44,9 +44,9 @@ export function StudySessionClient({ deck, cards }: StudySessionClientProps) {
   // Progress shows how many cards have been learned (marked correct) out of total
   const progress = totalCards > 0 ? (knownCardIds.size / totalCards) * 100 : 0;
 
-  const handleFlip = () => {
+  const handleFlip = useCallback(() => {
     setIsFlipped(!isFlipped);
-  };
+  }, [isFlipped]);
 
   const handleAnswer = (isCorrect: boolean) => {
     setStats(prev => ({
@@ -79,21 +79,21 @@ export function StudySessionClient({ deck, cards }: StudySessionClientProps) {
     }
   };
 
-  const handlePrevious = () => {
+  const handlePrevious = useCallback(() => {
     if (currentIndex > 0) {
       setCurrentIndex(prev => prev - 1);
       setIsFlipped(false);
     }
-  };
+  }, [currentIndex]);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (currentIndex < remainingCards.length - 1) {
       setCurrentIndex(prev => prev + 1);
       setIsFlipped(false);
     }
-  };
+  }, [currentIndex, remainingCards.length]);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setCurrentIndex(0);
     setIsFlipped(false);
     setIsCompleted(false);
@@ -102,9 +102,9 @@ export function StudySessionClient({ deck, cards }: StudySessionClientProps) {
     // Shuffle all cards again
     const shuffled = [...cards].sort(() => Math.random() - 0.5);
     setShuffledCards(shuffled);
-  };
+  }, [cards]);
 
-  const handleShuffle = () => {
+  const handleShuffle = useCallback(() => {
     // Shuffle only remaining unknown cards without resetting progress
     const unknownCards = shuffledCards.filter(card => !knownCardIds.has(card.id));
     const shuffled = [...unknownCards].sort(() => Math.random() - 0.5);
@@ -113,7 +113,7 @@ export function StudySessionClient({ deck, cards }: StudySessionClientProps) {
     setShuffledCards([...shuffled, ...knownCards]);
     setCurrentIndex(0);
     setIsFlipped(false);
-  };
+  }, [shuffledCards, knownCardIds]);
 
   // Keyboard shortcuts - placed after all function declarations
   useEffect(() => {
